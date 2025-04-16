@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,7 +62,17 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				// QuickDeliver custom colors
+				"qd-purple": {
+          DEFAULT: "#9b87f5",
+          dark: "#7E69AB"
+        },
+        "qd-blue": "#1EAEDB",
+        "qd-orange": "#F97316",
+        "qd-light": "#F1F0FB",
+        "qd-gray": "#8E9196",
+        "qd-dark": "#1A1F2C"
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
