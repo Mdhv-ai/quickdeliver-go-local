@@ -1,21 +1,32 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
-
-// This is a mock function that would be replaced with actual authentication logic
-const useAuth = () => {
-  // Mock user data - in a real app, this would come from your auth context
-  return {
-    isAuthenticated: true, // For demo purposes
-    user: {
-      role: 'customer', // 'customer' or 'partner' based on login
-      name: 'John Doe',
-    }
-  };
-};
+import { useAuth } from '@/contexts/AuthContext';
+import { useToast } from '@/components/ui/use-toast';
 
 const Dashboard: React.FC = () => {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, isLoading } = useAuth();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    // Show welcome toast when redirecting
+    if (isAuthenticated && user) {
+      toast({
+        title: `Welcome to QuickDeliver, ${user.name}!`,
+        description: "You're being redirected to your dashboard.",
+        duration: 3000,
+      });
+    }
+  }, [isAuthenticated, user, toast]);
+
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin h-8 w-8 border-4 border-brand-purple border-t-transparent rounded-full"></div>
+      </div>
+    );
+  }
 
   // If not authenticated, redirect to login
   if (!isAuthenticated) {
@@ -23,7 +34,7 @@ const Dashboard: React.FC = () => {
   }
 
   // Redirect based on user role
-  return user.role === 'customer' 
+  return user?.role === 'customer' 
     ? <Navigate to="/customer" /> 
     : <Navigate to="/partner" />;
 };

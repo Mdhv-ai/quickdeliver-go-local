@@ -1,36 +1,44 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthForm from '@/components/AuthForm';
 import Logo from '@/components/Logo';
 import { useToast } from "@/components/ui/use-toast";
+import { useAuth } from '@/contexts/AuthContext';
 
 const Auth: React.FC = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const { login, isAuthenticated, user } = useAuth();
 
-  // Mock authentication - in a real app, you would get the user role from the authentication response
-  const getUserRole = () => {
-    // This is just a placeholder - in a real app, this would come from your auth context or API response
-    return Math.random() > 0.5 ? 'customer' : 'partner';
-  };
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      navigate(user.role === 'customer' ? '/customer' : '/partner');
+    }
+  }, [isAuthenticated, user, navigate]);
 
   // This function will be called by AuthForm when login is successful
-  const handleLoginSuccess = () => {
+  const handleLoginSuccess = async (email: string, password: string, role: 'customer' | 'partner') => {
     setIsLoggingIn(true);
-    toast({
-      title: "Login Successful!",
-      description: "Welcome back to QuickDeliver.",
-    });
     
-    // Get user role and redirect to appropriate dashboard
-    const userRole = getUserRole();
-    
-    // Add a small delay to show the toast before redirecting
-    setTimeout(() => {
-      navigate(userRole === 'customer' ? '/customer' : '/partner');
-    }, 1000);
+    try {
+      await login(email, password, role);
+      
+      toast({
+        title: "Login Successful!",
+        description: "Welcome back to QuickDeliver.",
+      });
+      
+    } catch (error) {
+      toast({
+        title: "Login Failed",
+        description: "Please check your credentials and try again.",
+        variant: "destructive",
+      });
+      setIsLoggingIn(false);
+    }
   };
 
   return (
@@ -40,7 +48,7 @@ const Auth: React.FC = () => {
       </header>
       
       <div className="flex-1 flex flex-col items-center justify-center px-4 py-12">
-        <AuthForm onLoginSuccess={handleLoginSuccess} />
+        <AuthForm onLoginSuccess={handleLoginSuccess} isLoading={isLoggingIn} />
         
         <div className="mt-8 text-center">
           <Link to="/" className="text-gray-500 text-sm hover:text-brand-purple">
