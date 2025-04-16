@@ -1,88 +1,72 @@
 
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import Logo from "@/components/Logo";
+import React, { useState, useEffect } from 'react';
+import { Menu, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import Logo from './Logo';
 
-const Navbar = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+const Navbar: React.FC = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <nav className="bg-white shadow-sm py-4">
-      <div className="container mx-auto px-4 flex justify-between items-center">
-        <Logo />
+    <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white shadow-md py-3' : 'bg-transparent py-5'}`}>
+      <nav className="container flex items-center justify-between">
+        <Logo size="md" />
         
-        {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-8">
-          <Link to="/" className="text-qd-gray hover:text-qd-purple font-medium transition-colors">Home</Link>
-          <Link to="#features" className="text-qd-gray hover:text-qd-purple font-medium transition-colors">Features</Link>
-          <Link to="#how-it-works" className="text-qd-gray hover:text-qd-purple font-medium transition-colors">How it Works</Link>
-          <div className="flex items-center gap-3">
-            <Link to="/login">
-              <Button variant="outline" className="border-qd-purple text-qd-purple hover:bg-qd-purple hover:text-white">
-                Login
-              </Button>
-            </Link>
-            <Link to="/signup">
-              <Button className="bg-qd-purple hover:bg-qd-purple-dark text-white">
-                Sign Up
-              </Button>
-            </Link>
+          <div className="space-x-6">
+            <Link to="/" className="text-gray-700 hover:text-brand-purple font-medium">Home</Link>
+            <Link to="/#how-it-works" className="text-gray-700 hover:text-brand-purple font-medium">How It Works</Link>
+            <Link to="/#features" className="text-gray-700 hover:text-brand-purple font-medium">Features</Link>
+          </div>
+          
+          <div className="flex gap-3">
+            <Button variant="outline" asChild>
+              <Link to="/auth?type=login">Login</Link>
+            </Button>
+            <Button variant="default" asChild>
+              <Link to="/auth?type=signup">Sign Up</Link>
+            </Button>
           </div>
         </div>
-        
-        {/* Mobile Menu Button */}
-        <div className="md:hidden">
-          <button onClick={toggleMenu} className="text-qd-dark focus:outline-none">
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
-      </div>
-      
+
+        <button 
+          className="md:hidden text-gray-700"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          {isOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </nav>
+
       {/* Mobile Menu */}
-      {isMenuOpen && (
-        <div className="md:hidden bg-white px-4 py-2 shadow-lg absolute w-full z-50">
-          <div className="flex flex-col space-y-3">
-            <Link 
-              to="/" 
-              className="text-qd-gray hover:text-qd-purple py-2 font-medium"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Home
-            </Link>
-            <Link 
-              to="#features" 
-              className="text-qd-gray hover:text-qd-purple py-2 font-medium"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Features
-            </Link>
-            <Link 
-              to="#how-it-works" 
-              className="text-qd-gray hover:text-qd-purple py-2 font-medium"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              How it Works
-            </Link>
-            <div className="flex flex-col space-y-2 pt-2">
-              <Link to="/login" onClick={() => setIsMenuOpen(false)}>
-                <Button variant="outline" className="border-qd-purple text-qd-purple hover:bg-qd-purple hover:text-white w-full">
-                  Login
-                </Button>
-              </Link>
-              <Link to="/signup" onClick={() => setIsMenuOpen(false)}>
-                <Button className="bg-qd-purple hover:bg-qd-purple-dark text-white w-full">
-                  Sign Up
-                </Button>
-              </Link>
+      {isOpen && (
+        <div className="md:hidden bg-white px-4 py-5 shadow-lg absolute top-full left-0 right-0">
+          <div className="flex flex-col gap-4">
+            <Link to="/" className="text-gray-700 hover:text-brand-purple font-medium py-2" onClick={() => setIsOpen(false)}>Home</Link>
+            <Link to="/#how-it-works" className="text-gray-700 hover:text-brand-purple font-medium py-2" onClick={() => setIsOpen(false)}>How It Works</Link>
+            <Link to="/#features" className="text-gray-700 hover:text-brand-purple font-medium py-2" onClick={() => setIsOpen(false)}>Features</Link>
+            
+            <div className="flex flex-col gap-3 mt-2">
+              <Button variant="outline" asChild onClick={() => setIsOpen(false)}>
+                <Link to="/auth?type=login">Login</Link>
+              </Button>
+              <Button variant="default" asChild onClick={() => setIsOpen(false)}>
+                <Link to="/auth?type=signup">Sign Up</Link>
+              </Button>
             </div>
           </div>
         </div>
       )}
-    </nav>
+    </header>
   );
 };
 

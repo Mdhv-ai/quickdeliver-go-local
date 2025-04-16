@@ -1,63 +1,74 @@
 
-import { MapPin, Calendar, Star, UserCheck, CreditCard, Zap } from "lucide-react";
+import React from 'react';
+import { MapPin, Package, CreditCard, Star, Shield, Clock, Zap, Users } from 'lucide-react';
 
-const Features = () => {
+const Features: React.FC = () => {
   const features = [
     {
-      icon: <MapPin className="w-12 h-12 text-qd-purple" />,
-      title: "Real-time Location Tracking",
-      description: "Track your delivery in real-time from pickup to destination with live map updates."
+      icon: <MapPin className="h-6 w-6 text-brand-purple" />,
+      title: "Easy Location Sharing",
+      description: "Simply enter your pickup and drop-off points for seamless delivery coordination."
     },
     {
-      icon: <Calendar className="w-12 h-12 text-qd-purple" />,
+      icon: <Package className="h-6 w-6 text-brand-purple" />,
+      title: "Item Details",
+      description: "Specify size, weight, and type to ensure proper handling of your deliveries."
+    },
+    {
+      icon: <CreditCard className="h-6 w-6 text-brand-purple" />,
+      title: "Flexible Payments",
+      description: "Pay through UPI, card, or cash on delivery - whatever works for you."
+    },
+    {
+      icon: <Star className="h-6 w-6 text-brand-purple" />,
+      title: "Rate & Reward",
+      description: "Provide feedback and tip your delivery partners for excellent service."
+    },
+    {
+      icon: <Shield className="h-6 w-6 text-brand-purple" />,
+      title: "Verified Partners",
+      description: "All delivery partners undergo KYC verification for your safety and security."
+    },
+    {
+      icon: <Clock className="h-6 w-6 text-brand-purple" />,
       title: "Full-Day Booking",
-      description: "Hire delivery partners for an entire day for all your business delivery needs."
+      description: "Book a delivery partner for an entire day for multiple business deliveries."
     },
     {
-      icon: <Star className="w-12 h-12 text-qd-purple" />,
-      title: "Ratings & Reviews",
-      description: "Quality assurance through our community-driven rating and review system."
+      icon: <Zap className="h-6 w-6 text-brand-purple" />,
+      title: "Real-time Updates",
+      description: "Get instant notifications as your package moves from pickup to delivery."
     },
     {
-      icon: <UserCheck className="w-12 h-12 text-qd-purple" />,
-      title: "Verified Delivery Partners",
-      description: "All delivery partners are verified through KYC for your safety and trust."
-    },
-    {
-      icon: <CreditCard className="w-12 h-12 text-qd-purple" />,
-      title: "Multiple Payment Options",
-      description: "Pay with your preferred method - UPI, debit card, or cash on delivery."
-    },
-    {
-      icon: <Zap className="w-12 h-12 text-qd-purple" />,
-      title: "Quick Job Matching",
-      description: "AI-powered matching connects you with the nearest available delivery partner."
+      icon: <Users className="h-6 w-6 text-brand-purple" />,
+      title: "Dual Platform",
+      description: "Specialized interfaces for both customers and delivery partners."
     }
   ];
 
   return (
-    <div id="features" className="py-16 md:py-24 bg-white">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-qd-dark">
-            Powerful <span className="text-qd-purple">Features</span>
-          </h2>
-          <p className="mt-4 text-lg text-qd-gray max-w-2xl mx-auto">
-            Everything you need for seamless local deliveries in one platform - designed for both customers and delivery partners.
+    <section id="features" className="py-20 bg-gray-50">
+      <div className="container">
+        <div className="text-center max-w-2xl mx-auto mb-16">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Features That Deliver</h2>
+          <p className="text-gray-600">
+            QuickDeliver combines powerful features to create the most reliable and efficient delivery experience.
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((feature, index) => (
-            <div key={index} className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-              <div className="mb-5">{feature.icon}</div>
-              <h3 className="text-xl font-semibold mb-3 text-qd-dark">{feature.title}</h3>
-              <p className="text-qd-gray">{feature.description}</p>
+            <div key={index} className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 transition-all hover:shadow-md">
+              <div className="p-3 bg-brand-light-purple rounded-full w-fit mb-4">
+                {feature.icon}
+              </div>
+              <h3 className="font-semibold text-lg mb-2">{feature.title}</h3>
+              <p className="text-gray-600">{feature.description}</p>
             </div>
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
